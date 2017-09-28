@@ -1,0 +1,48 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<dom-module id="my-data">
+  <template>
+    <style>
+      :host {
+        display: none;
+      }
+    </style>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'my-data',
+      properties: {
+        instances: {
+          type: Array,
+          value: [], // shared among instances
+        },
+        share: {
+          type: Object,
+          value: {
+            value: ''
+          }, // shared among instances
+          notify: true,
+        },
+      },
+
+      observers: [
+        '_logComplexChange(share.*)',
+      ],
+
+      ready() {
+        // update list of instances
+        this.instances.push(this);
+      },
+
+      _logComplexChange(changes) {
+        // notify hosts of other instances
+        this.instances.forEach((instance) => {
+          if (instance !== this) {
+            instance.notifyPath(changes.path);
+          }
+        });
+      },
+    });
+  </script>
+</dom-module>
