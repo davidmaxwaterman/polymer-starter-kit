@@ -10,6 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="shared-styles.html">
 
 <link rel="import" href="my-data.html">
@@ -29,10 +30,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <h1>View One</h1>
       <p>Ut labores minimum atomorum pro. Laudem tibique ut has.</p>
       <p>Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Cu mei vide viris gloriatur, at populo eripuit sit.</p>
+      <paper-button on-click="_handleButtonClick">Create something in shared property.</paper-button>
       <paper-input id="data" value="{{share.value}}"></paper-input>
     </div>
 
-    <my-data share="{{share}}"></my-data>
+    <my-data on-share-changed="_logShareChanged" share="{{share}}"></my-data>
   </template>
 
   <script>
@@ -40,6 +42,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       is: 'my-view1',
 
       properties: {
+        _counter: {
+          type: Number,
+          value: 0,
+        },
         share: {
           type: Object,
         },
@@ -55,6 +61,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _logComplexChange(changes) {
         console.log('complex change:', changes);
+      },
+
+      _logShareChanged(event) {
+        console.log('change event:', event);
+      },
+
+      _handleButtonClick(event) {
+        if (!this.share.hello) {
+          this.set('share.hello', []);
+        }
+        this.push('share.hello', {value: this._counter} );
+        this._counter++;
       },
 
     });

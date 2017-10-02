@@ -78,6 +78,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <a name="view3" href="/view3">View Three</a>
         </iron-selector>
         <paper-input value="{{share.value}}"></paper-input>
+        <div>[[_localHello]]</div>
       </app-drawer>
 
       <!-- Main content -->
@@ -120,12 +121,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         share: {
           type: Object,
         },
+
+        _localHello: {
+          type: String,
+          value: 'not set yet',
+        },
       },
 
       observers: [
         '_routePageChanged(routeData.page)',
         '_logComplexChange(share.*)',
+        '_handleHelloChange(share.hello.*)',
       ],
+
+      _handleHelloChange(newHello) {
+        if (newHello) {
+          this.set('_localHello', newHello.value);
+        }
+      },
 
       _logChange(newValue, oldValue) {
         console.log('share changed:', newValue, oldValue);

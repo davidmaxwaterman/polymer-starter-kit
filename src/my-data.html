@@ -22,7 +22,6 @@
           value: {
             value: ''
           }, // shared among instances
-          notify: true,
         },
       },
 
@@ -33,13 +32,20 @@
       ready() {
         // update list of instances
         this.instances.push(this);
+
+        // update host's share
+        this.fire('share-changed', {
+          base: this.share,
+          path: 'share',
+          value: this.share,
+        });
       },
 
       _logComplexChange(changes) {
         // notify hosts of other instances
         this.instances.forEach((instance) => {
           if (instance !== this) {
-            instance.notifyPath(changes.path);
+            instance.fire('share-changed', changes);
           }
         });
       },
