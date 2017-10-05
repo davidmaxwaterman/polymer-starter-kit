@@ -34,7 +34,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <paper-input id="data" value="{{share.value}}"></paper-input>
     </div>
 
-    <my-data on-share-changed="_logShareChanged" share="{{share}}"></my-data>
+    <my-data share="{{share}}"></my-data>
   </template>
 
   <script>
@@ -55,16 +55,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         '_logComplexChange(share.*)',
       ],
 
-      _logChange(newValue, oldValue) {
-        console.log('share changed:', newValue, oldValue);
-      },
-
       _logComplexChange(changes) {
         console.log('complex change:', changes);
-      },
-
-      _logShareChanged(event) {
-        console.log('change event:', event);
       },
 
       _handleButtonClick(event) {
