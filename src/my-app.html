@@ -104,7 +104,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </app-header-layout>
     </app-drawer-layout>
 
-    <my-data share="{{share}}"></my-data>
+    <my-data id="my_data" share="{{share}}"></my-data>
   </template>
 
   <script>
@@ -118,9 +118,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           observer: '_pageChanged',
         },
 
-        share: {
-          type: Object,
-        },
+        share: Object,
 
         _localHello: {
           type: String,
@@ -129,10 +127,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       observers: [
+        //'myDataObserver(share.*)',
         '_routePageChanged(routeData.page)',
         '_logComplexChange(share.*)',
         '_handleHelloChange(share.hello.*)',
       ],
+
+      myDataObserver(changes) {
+        this.$.my_data.proliferateChange(changes);
+      },
 
       _handleHelloChange(newHello) {
         if (newHello) {

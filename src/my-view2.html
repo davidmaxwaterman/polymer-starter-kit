@@ -28,10 +28,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <h1>View Two</h1>
       <p>Ea duis bonorum nec, falli paulo aliquid ei eum.</p>
       <p>Id nam odio natum malorum, tibique copiosae expetenda mel ea.Detracto suavitate repudiandae no eum. Id adhuc minim soluta nam.Id nam odio natum malorum, tibique copiosae expetenda mel ea.</p>
-      <h1>value:[[store.value]]</h1>
+      <h1>value:[[share.value]]</h1>
     </div>
 
-    <my-data share="{{store}}"></my-data>
+    <my-data id="my_data" share="{{share}}"></my-data>
   </template>
 
   <script>
@@ -39,18 +39,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       is: 'my-view2',
 
       properties: {
-        store: {
-          type: Object,
-          observer: '_logChange',
-        },
+        share: Object,
       },
 
       observers: [
-        '_logComplexChange(store.*)',
+        //'myDataObserver(share.*)',
+        '_logComplexChange(share.*)',
       ],
 
-      _logChange(newValue, oldValue) {
-        console.log('store changed:', newValue, oldValue);
+      myDataObserver(changes) {
+        this.$.my_data.proliferateChange(changes);
       },
 
       _logComplexChange(changes) {

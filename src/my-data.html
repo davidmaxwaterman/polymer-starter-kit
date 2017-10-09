@@ -13,6 +13,12 @@
     Polymer({
       is: 'my-data',
       properties: {
+        proliferating: {
+          type: Object,
+          value: {
+            value: false,
+          }, // shared among instances
+        },
         instances: {
           type: Array,
           value: [], // shared among instances
@@ -26,7 +32,7 @@
       },
 
       observers: [
-        '_proliferateChange(share.*)',
+        'proliferateChange(share.*)',
       ],
 
       ready() {
@@ -34,27 +40,26 @@
         this.instances.push(this);
 
         // update host's share
-        this.fire('share-changed', {
-          base: this.share,
-          path: 'share',
-          value: this.share,
-        },
-        {bubbles: false});
+        this.parentNode.host.share = this.share;
       },
 
-      _proliferateChange(changes) {
-        // notify hosts of other instances
-        this.instances.forEach((instance) => {
-          if (instance !== this) {
-            console.info(`event from my-data in:${this.parentNode.host.nodeName} to my-data in:${instance.parentNode.host.nodeName}`);
-            this.fire('share-changed',
-              Object.assign({}, changes),
-              {
-              node: instance,
-              bubbles: false,
-            });
-          }
-        });
+      proliferateChange(changes) {
+        if (!this.proliferating.value) {
+          // notify hosts of other instances
+          this.instances.forEach((instance) => {
+            if (instance !== this) {
+              console.info(`event from my-data in:${this.parentNode.host.nodeName} to my-data in:${instance.parentNode.host.nodeName}`);
+              this.proliferating.value = true;
+              this.fire('share-changed',
+                changes,
+                {
+                node: instance,
+                bubbles: false,
+              });
+              this.proliferating.value = false;
+            }
+          });
+        }
       },
     });
   </script>

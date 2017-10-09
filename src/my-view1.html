@@ -34,7 +34,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <paper-input id="data" value="{{share.value}}"></paper-input>
     </div>
 
-    <my-data share="{{share}}"></my-data>
+    <my-data id="my_data" share="{{share}}"></my-data>
   </template>
 
   <script>
@@ -46,14 +46,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Number,
           value: 0,
         },
-        share: {
-          type: Object,
-        },
+        share: Object,
       },
 
       observers: [
+        //'myDataObserver(share.*)',
         '_logComplexChange(share.*)',
       ],
+
+      myDataObserver(changes) {
+        this.$.my_data.proliferateChange(changes);
+      },
 
       _logComplexChange(changes) {
         console.log('complex change:', changes);
